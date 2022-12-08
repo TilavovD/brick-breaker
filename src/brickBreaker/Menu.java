@@ -67,10 +67,14 @@ public class Menu implements ActionListener {
             frame.setVisible(true);
         }
         else if (e.getSource() == b2) {
-            //score
+            try {
+                Score leaderboard = new Score(DatabaseManager.db_manager.getLeaderboard());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         else if (e.getSource() == b3) {
-            frame.dispose();
+
             Help help = new Help();
         }
         else if (e.getSource() == b4) {

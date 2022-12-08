@@ -25,9 +25,8 @@ public class SignUp implements ActionListener {
     JButton signInButton = new JButton("Sign in");
     Border whiteLine = BorderFactory.createLineBorder(Color.white);
 
-    DatabaseManager db_manager;
+    DatabaseManager db_manager = DatabaseManager.db_manager;
     SignUp() throws SQLException {
-        this.db_manager = new DatabaseManager();
         TitledBorder t1, t2, t3, t4;
         t1 = BorderFactory.createTitledBorder(whiteLine, "Username ");
         t1.setTitleJustification(TitledBorder.LEFT);

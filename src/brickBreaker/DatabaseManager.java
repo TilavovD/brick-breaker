@@ -1,5 +1,6 @@
 package brickBreaker;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.Objects;
 
@@ -7,7 +8,17 @@ public class DatabaseManager {
     Statement stmt;
     Connection conn;
 
-    public DatabaseManager() throws SQLException {
+    static DatabaseManager db_manager;
+
+    static {
+        try {
+            db_manager = new DatabaseManager();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private DatabaseManager() throws SQLException {
         this.conn = DriverManager.getConnection("jdbc:mysql://65.108.218.58:33306/mysql?autoReconnect=true&useSSL=false", "root", "aet4gieh9etie3Nokoo7bai4");
         this.stmt = this.conn.createStatement();
     }
@@ -32,17 +43,6 @@ public class DatabaseManager {
         stmt.executeUpdate(query);
     }
 
-    public boolean loginUser(String name, String password) throws SQLException {
-        String query = "select password from users where username like '" + name + "';";
-        ResultSet result = stmt.executeQuery(query);
-        String user_password = null;
-        while (result.next()) {
-            user_password = result.getString("password");
-        }
-        return Objects.equals(user_password, password);
-
-    }
-
     public boolean usernameExists(String name) throws SQLException {
         String query = "select username from users where username like '" + name + "';";
         ResultSet result = stmt.executeQuery(query);
@@ -62,7 +62,7 @@ public class DatabaseManager {
         String[] record = new String[2];
         int count = 0, score;
         String name;
-        while (result.next()){
+        while (result.next()) {
             name = result.getString("username");
             score = result.getInt("high_score");
             record[0] = name;

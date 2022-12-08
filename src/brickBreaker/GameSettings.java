@@ -14,7 +14,7 @@ import javax.swing.Timer;
 public class GameSettings extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
 
-    private final DatabaseManager db_manager = new DatabaseManager();
+    DatabaseManager db_manager = DatabaseManager.db_manager;
     private int score = 0;
 
     private int totalBricks = 400;

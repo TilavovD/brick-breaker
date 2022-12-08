@@ -19,9 +19,8 @@ public class Login implements ActionListener {
     JFrame frame = new JFrame();
     JButton signUpButton = new JButton("Sign up");
 
-    DatabaseManager db_manager;
+    DatabaseManager db_manager = DatabaseManager.db_manager;
     Login() throws SQLException {
-        this.db_manager = new DatabaseManager();
         Border whiteLine = BorderFactory.createLineBorder(Color.white);
         TitledBorder t1, t2;
         t1 = BorderFactory.createTitledBorder(whiteLine, "Username");

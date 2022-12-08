@@ -29,7 +29,7 @@ public class Help  implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button){
             frame.dispose();
-            Menu menu = new Menu("dostonbek");
+//            Menu menu = new Menu("dostonbek");
         }
     }
 }
