@@ -11,7 +11,9 @@ public class Menu implements ActionListener {
     JButton b3 = new JButton("Help");
     JButton b4 = new JButton("Quit");
     JFrame frame = new JFrame();
-    Menu(){
+    String username;
+    Menu(String username){
+        this.username = username;
         b1.setBounds(160,100,100,25);
         b1.setFocusable(false);
         b1.addActionListener(this);
@@ -44,7 +46,7 @@ public class Menu implements ActionListener {
             //Create gameplay object where all commands processed
             GameSettings gamePlay = null;
             try {
-                gamePlay = new GameSettings("dostonbek");
+                gamePlay = new GameSettings(username);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }

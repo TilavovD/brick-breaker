@@ -7,51 +7,57 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Objects;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Login implements ActionListener {
     JLabel label = new JLabel("or");
-    JTextField tf = new JTextField();
-    JPasswordField pwd = new JPasswordField();
-    JButton b1 = new JButton("Sign in");
+    JTextField usernameField = new JTextField();
+    JPasswordField passwordField = new JPasswordField();
+    JButton signInButton = new JButton("Sign in");
     JFrame frame = new JFrame();
-    JButton b2 = new JButton("Sign up");
-    Login(){
+    JButton signUpButton = new JButton("Sign up");
+
+    DatabaseManager db_manager;
+    Login() throws SQLException {
+        this.db_manager = new DatabaseManager();
         Border whiteLine = BorderFactory.createLineBorder(Color.white);
         TitledBorder t1, t2;
         t1 = BorderFactory.createTitledBorder(whiteLine, "Username");
         t1.setTitleJustification(TitledBorder.LEFT);
         t1.setTitleColor(Color.white);
-        tf.setBounds(110,100,200,40);
-        tf.setBackground(Color.decode("#364F6B"));
-        tf.setBorder(t1);
-        tf.setForeground(Color.white);
+        usernameField.setBounds(110,100,200,40);
+        usernameField.setBackground(Color.decode("#364F6B"));
+        usernameField.setBorder(t1);
+        usernameField.setForeground(Color.white);
         t2 = BorderFactory.createTitledBorder(whiteLine, "Password");
         t2.setTitleJustification(TitledBorder.LEFT);
         t2.setTitleColor(Color.white);
-        pwd.setBounds(110,150,200,40);
-        pwd.setBackground(Color.decode("#364F6B"));
-        pwd.setBorder(t2);
-        pwd.setForeground(Color.white);
-        b1.setBounds(90,200,100,25);
-        b1.setFocusable(false);
-        b1.addActionListener(this);
-        b1.setBackground(Color.decode("#364F6B"));
-        b1.setForeground(Color.decode("#6D9886"));
-        b1.setBorder(new RoundedBorder(20));
+        passwordField.setBounds(110,150,200,40);
+        passwordField.setBackground(Color.decode("#364F6B"));
+        passwordField.setBorder(t2);
+        passwordField.setForeground(Color.white);
+        signInButton.setBounds(90,200,100,25);
+        signInButton.setFocusable(false);
+        signInButton.addActionListener(this);
+        signInButton.setBackground(Color.decode("#364F6B"));
+        signInButton.setForeground(Color.decode("#6D9886"));
+        signInButton.setBorder(new RoundedBorder(20));
         label.setBounds(200,200,20,25);
         label.setForeground(Color.white);
-        b2.setBounds(225,200,100,25);
-        b2.setFocusable(false);
-        b2.addActionListener(this);
-        b2.setBackground(Color.decode("#364F6B"));
-        b2.setForeground(Color.decode("#6D9886"));
-        b2.setBorder(new RoundedBorder(20));
+        signUpButton.setBounds(225,200,100,25);
+        signUpButton.setFocusable(false);
+        signUpButton.addActionListener(this);
+        signUpButton.setBackground(Color.decode("#364F6B"));
+        signUpButton.setForeground(Color.decode("#6D9886"));
+        signUpButton.setBorder(new RoundedBorder(20));
         frame.setSize(420,420);
         frame.add(label);
-        frame.add(tf);
-        frame.add(pwd);
-        frame.add(b1);
-        frame.add(b2);
+        frame.add(usernameField);
+        frame.add(passwordField);
+        frame.add(signInButton);
+        frame.add(signUpButton);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Login");
@@ -61,11 +67,30 @@ public class Login implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == b1){
-            frame.dispose();
-            Menu menu = new Menu();
+        if(e.getSource() == signInButton){
+
+            if (Objects.equals(usernameField.getText(), "") || Objects.equals(String.valueOf(passwordField.getPassword()), "")){
+                showMessageDialog(frame, "Username and password cannot be blank! Please fill both of them!");
+                }
+            else{
+                boolean userExists = false;
+                try {
+                    userExists = db_manager.userExists(usernameField.getText(), String.valueOf(passwordField.getPassword()));
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                if (userExists) {
+                    frame.dispose();
+                    Menu menu = new Menu(usernameField.getText());
+                }
+                else {
+                    showMessageDialog(frame, "Your username and password did not match. Please, recheck them!");
+                }
+
+            }
+
         }
-        else if (e.getSource() == b2) {
+        else if (e.getSource() == signUpButton) {
             frame.dispose();
             try {
                 SignUp signUp = new SignUp();

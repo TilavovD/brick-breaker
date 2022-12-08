@@ -5,10 +5,11 @@ import java.util.Objects;
 
 public class DatabaseManager {
     Statement stmt;
+    Connection conn;
 
     public DatabaseManager() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://65.108.218.58:33306/mysql?autoReconnect=true&useSSL=false", "root", "aet4gieh9etie3Nokoo7bai4");
-        this.stmt = conn.createStatement();
+        this.conn = DriverManager.getConnection("jdbc:mysql://65.108.218.58:33306/mysql?autoReconnect=true&useSSL=false", "root", "aet4gieh9etie3Nokoo7bai4");
+        this.stmt = this.conn.createStatement();
     }
 
     public int getHighScore(String name) throws SQLException {
@@ -26,8 +27,8 @@ public class DatabaseManager {
         stmt.executeUpdate(query);
     }
 
-    public void registerUser(String username, String email, int phone, String password) throws SQLException {
-        String query = "insert into users (username, email, phone_number, password, high_score) values ('" + username + "', '" + email + "', " + phone + ", '" + password + "', 0);";
+    public void registerUser(String username, String password) throws SQLException {
+        String query = "insert into users (username, password, high_score) values ('" + username + "', '" + password + "', 0);";
         stmt.executeUpdate(query);
     }
 
@@ -48,6 +49,12 @@ public class DatabaseManager {
         return result.next();
     }
 
+    public boolean userExists(String name, String password) throws SQLException {
+        String query = "select username from users where username like '" + name + "' and password like '" + password + "';";
+        ResultSet result = stmt.executeQuery(query);
+        return result.next();
+    }
+
     public String[][] getLeaderboard() throws SQLException {
         String query = "select username, high_score from users limit 1;";
         ResultSet result = stmt.executeQuery(query);
@@ -63,5 +70,9 @@ public class DatabaseManager {
             leaderboard[count] = record;
         }
         return leaderboard;
+    }
+
+    public void closeConnection() throws SQLException {
+        this.conn.close();
     }
 }

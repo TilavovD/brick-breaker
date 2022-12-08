@@ -17,7 +17,7 @@ public class SignUp implements ActionListener {
     JRadioButton radioButton2 = new JRadioButton("Phone number");
     JTextField usernameField = new JTextField();
     JTextField emailField = new JTextField();
-    JTextField passwordField = new JTextField();
+    JTextField passwordField = new JPasswordField();
     JTextField phoneNumberField = new JTextField();
     JLabel label = new JLabel("or");
     JButton submitButton = new JButton("Submit");
@@ -36,6 +36,7 @@ public class SignUp implements ActionListener {
         usernameField.setBackground(Color.decode("#364F6B"));
         usernameField.setBorder(t1);
         usernameField.setForeground(Color.white);
+        usernameField.setCaretColor(Color.white);
         t2 = BorderFactory.createTitledBorder(whiteLine, "E-mail ");
         t2.setTitleJustification(TitledBorder.LEFT);
         t2.setTitleColor(Color.white);
@@ -104,11 +105,10 @@ public class SignUp implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         boolean usernameExists;
-        boolean has_error = false;
         if(e.getSource() == submitButton){
             if (Objects.equals(usernameField.getText(), "") || Objects.equals(passwordField.getText(), "")){
-                showMessageDialog(null, "Username and password cannot be blank! Please fill both of them!");
-                has_error = true;}
+                showMessageDialog(frame, "Username and password cannot be blank! Please fill both of them!");
+               }
             else{
                 try {
                 usernameExists = this.db_manager.usernameExists(usernameField.getText());
@@ -117,23 +117,37 @@ public class SignUp implements ActionListener {
                 }
                 if (usernameExists){
                     showMessageDialog(null, "User with this username already exists. Please, choose another one!");
-                    has_error = true;
+
                 }
                 else{
                     if(passwordField.getText().length() < 4 || passwordField.getText().length() >8) {
                         showMessageDialog(null, "Length of password must be more than 4 and less than 8");
                     }
-//                    else{
-//
-//                    }
+                    else{
+                        try {
+                            db_manager.registerUser(usernameField.getText(), passwordField.getText());
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        frame.dispose();
+                        try {
+                            Login login = new Login();
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+                    }
                 }
             }
-//            frame.dispose();
-//            Login login = new Login();
+
         }
         else if (e.getSource() == signInButton) {
             frame.dispose();
-            Login login = new Login();
+            try {
+                Login login = new Login();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
