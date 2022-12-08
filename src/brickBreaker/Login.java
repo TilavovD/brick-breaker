@@ -55,6 +55,7 @@ public class Login implements ActionListener {
         frame.add(label);
         frame.add(usernameField);
         frame.add(passwordField);
+        frame.setLocationRelativeTo(null);
         frame.add(signInButton);
         frame.add(signUpButton);
 

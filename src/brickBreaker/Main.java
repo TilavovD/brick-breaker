@@ -10,7 +10,7 @@ public class Main {
 
         SignUp signUpFrame = new SignUp();
 //        DatabaseManager db = DatabaseManager.db_manager;
-//        System.out.println(Arrays.deepToString(db.getLeaderboard()));
+//        System.out.println(Arrays.deepToString(db.getLeaderboard()) );
     }
 
 }
