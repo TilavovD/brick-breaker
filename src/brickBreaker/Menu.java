@@ -67,7 +67,7 @@ public class Menu implements ActionListener {
         }
         else if (e.getSource() == b2) {
             try {
-                Score leaderboard = new Score(DatabaseManager.db_manager.getLeaderboard());
+                new Score(DatabaseManager.db_manager.getLeaderboard());
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }

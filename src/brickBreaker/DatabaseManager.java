@@ -55,10 +55,10 @@ public class DatabaseManager {
         return result.next();
     }
 
-    public String[][] getLeaderboard() throws SQLException {
+    public final String[][] getLeaderboard() throws SQLException {
         String query = "select username, high_score from users order by high_score desc limit 10;";
         ResultSet result = stmt.executeQuery(query);
-        String[][] leaderboard = new String[10][3];
+        final String[][] leaderboard = new String[10][3];
         String[] record;
         int count = 0, score;
         String name;
