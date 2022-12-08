@@ -56,18 +56,21 @@ public class DatabaseManager {
     }
 
     public String[][] getLeaderboard() throws SQLException {
-        String query = "select username, high_score from users limit 1;";
+        String query = "select username, high_score from users order by high_score desc limit 10;";
         ResultSet result = stmt.executeQuery(query);
         String[][] leaderboard = new String[10][2];
-        String[] record = new String[2];
+        String[] record;
         int count = 0, score;
         String name;
         while (result.next()) {
+            record = new String[2];
             name = result.getString("username");
             score = result.getInt("high_score");
             record[0] = name;
             record[1] = String.valueOf(score);
             leaderboard[count] = record;
+
+            count++;
         }
         return leaderboard;
     }
