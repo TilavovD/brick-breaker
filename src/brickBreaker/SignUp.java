@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Objects;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -102,34 +103,33 @@ public class SignUp implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        boolean usernameExists = false;
+        boolean usernameExists;
+        boolean has_error = false;
         if(e.getSource() == submitButton){
-            try {
-                usernameExists = this.db_manager.usernameExists(usernameField.getText());
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            if (usernameExists){
-                showMessageDialog(null, "User with this username already exists. Please, choose another one!");
-                frame.dispose();
+            if (Objects.equals(usernameField.getText(), "") || Objects.equals(passwordField.getText(), "")){
+                showMessageDialog(null, "Username and password cannot be blank! Please fill both of them!");
+                has_error = true;}
+            else{
                 try {
-                    new SignUp();
+                usernameExists = this.db_manager.usernameExists(usernameField.getText());
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                //alert window "User with such username already exists"
-            }
-            else{
-                if (radioButton1.isSelected()){
-
+                if (usernameExists){
+                    showMessageDialog(null, "User with this username already exists. Please, choose another one!");
+                    has_error = true;
                 }
-                else if (radioButton2.isSelected()){
-
+                else{
+                    if(passwordField.getText().length() < 4 || passwordField.getText().length() >8) {
+                        showMessageDialog(null, "Length of password must be more than 4 and less than 8");
+                    }
+//                    else{
+//
+//                    }
                 }
-                //secret code window depending on confirmation method
             }
-            frame.dispose();
-            Login login = new Login();
+//            frame.dispose();
+//            Login login = new Login();
         }
         else if (e.getSource() == signInButton) {
             frame.dispose();
