@@ -30,6 +30,7 @@ public class Login implements ActionListener {
         usernameField.setBackground(Color.decode("#364F6B"));
         usernameField.setBorder(t1);
         usernameField.setForeground(Color.white);
+        usernameField.setCaretColor(Color.white);
         t2 = BorderFactory.createTitledBorder(whiteLine, "Password");
         t2.setTitleJustification(TitledBorder.LEFT);
         t2.setTitleColor(Color.white);
@@ -37,6 +38,7 @@ public class Login implements ActionListener {
         passwordField.setBackground(Color.decode("#364F6B"));
         passwordField.setBorder(t2);
         passwordField.setForeground(Color.white);
+        passwordField.setCaretColor(Color.white);
         signInButton.setBounds(90,200,100,25);
         signInButton.setFocusable(false);
         signInButton.addActionListener(this);

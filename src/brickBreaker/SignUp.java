@@ -14,6 +14,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class SignUp implements ActionListener {
     JTextField usernameField = new JTextField();
     JTextField passwordField = new JPasswordField();
+    JPasswordField confirmPasswordField = new JPasswordField();
     JLabel label = new JLabel("or");
     JButton submitButton = new JButton("Submit");
     JFrame frame = new JFrame();
@@ -22,7 +23,7 @@ public class SignUp implements ActionListener {
 
     DatabaseManager db_manager = DatabaseManager.db_manager;
     SignUp() throws SQLException {
-        TitledBorder t1, t2, t3, t4;
+        TitledBorder t1, t2, t3;
         t1 = BorderFactory.createTitledBorder(whiteLine, "Username ");
         t1.setTitleJustification(TitledBorder.LEFT);
         t1.setTitleColor(Color.white);
@@ -38,15 +39,24 @@ public class SignUp implements ActionListener {
         passwordField.setBackground(Color.decode("#364F6B"));
         passwordField.setBorder(t3);
         passwordField.setForeground(Color.white);
-        submitButton.setBounds(90,200,100,25);
+        passwordField.setCaretColor(Color.white);
+        t2 = BorderFactory.createTitledBorder(whiteLine,"Confirm password");
+        t2.setTitleJustification(TitledBorder.LEFT);
+        t2.setTitleColor(Color.white);
+        confirmPasswordField.setBounds(110,200,200,40);
+        confirmPasswordField.setBackground(Color.decode("#364F6B"));
+        confirmPasswordField.setBorder(t2);
+        confirmPasswordField.setForeground(Color.white);
+        confirmPasswordField.setCaretColor(Color.white);
+        submitButton.setBounds(90,250,100,25);
         submitButton.setFocusable(false);
         submitButton.addActionListener(this);
         submitButton.setBackground(Color.decode("#364F6B"));
         submitButton.setForeground(Color.decode("#6D9886"));
         submitButton.setBorder(new Login.RoundedBorder(20));
-        label.setBounds(200,200,20,25);
+        label.setBounds(200,250,20,25);
         label.setForeground(Color.white);
-        signInButton.setBounds(225,200,100,25);
+        signInButton.setBounds(225,250,100,25);
         signInButton.setFocusable(false);
         signInButton.addActionListener(this);
         signInButton.setBackground(Color.decode("#364F6B"));
@@ -55,6 +65,7 @@ public class SignUp implements ActionListener {
         frame.setSize(420,420);
         frame.add(label);
         frame.add(usernameField);
+        frame.add(confirmPasswordField);
         frame.setLocationRelativeTo(null);
         frame.add(passwordField);
         frame.add(submitButton);
@@ -70,7 +81,7 @@ public class SignUp implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         boolean usernameExists;
         if(e.getSource() == submitButton){
-            if (Objects.equals(usernameField.getText(), "") || Objects.equals(passwordField.getText(), "")){
+            if (Objects.equals(usernameField.getText(), "") || Objects.equals(passwordField.getText(), "") ||  Objects.equals(String.valueOf(confirmPasswordField.getPassword()), "")){
                 showMessageDialog(frame, "Username and password cannot be blank! Please fill both of them!");
                }
             else{
@@ -88,16 +99,24 @@ public class SignUp implements ActionListener {
                         showMessageDialog(null, "Length of password must be more than 4 and less than 8");
                     }
                     else{
-                        try {
-                            db_manager.registerUser(usernameField.getText(), passwordField.getText());
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                        if(!Objects.equals(passwordField.getText(), String.valueOf(confirmPasswordField.getPassword()))) {
+                            showMessageDialog(null, "Your password did not match! Please, recheck and reenter!");
                         }
-                        frame.dispose();
-                        try {
-                            Login login = new Login();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                        else {
+
+                            try {
+                                db_manager.registerUser(usernameField.getText(), passwordField.getText());
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
+
+
+                            frame.dispose();
+                            try {
+                                Login login = new Login();
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
 
                     }
