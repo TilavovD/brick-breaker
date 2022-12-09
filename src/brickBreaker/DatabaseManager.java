@@ -1,14 +1,12 @@
 package brickBreaker;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
-import java.util.Objects;
 
 public class DatabaseManager {
     Statement stmt;
     Connection conn;
 
-    static DatabaseManager db_manager;
+    private static final DatabaseManager db_manager;
 
     static {
         try {
@@ -16,6 +14,10 @@ public class DatabaseManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static DatabaseManager getObject() {
+        return db_manager;
     }
 
     private DatabaseManager() throws SQLException {

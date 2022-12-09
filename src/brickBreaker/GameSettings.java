@@ -14,13 +14,12 @@ import javax.swing.Timer;
 public class GameSettings extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
 
-    DatabaseManager db_manager = DatabaseManager.db_manager;
+    DatabaseManager db_manager = DatabaseManager.getObject();
     private int score = 0;
 
     private int totalBricks = 400;
 
-    private Timer timer;
-    private int delay = 8;
+    private final Timer timer;
 
     Random random = new Random();
     private int ballposX = random.nextInt(0, 2000);
@@ -28,8 +27,8 @@ public class GameSettings extends JPanel implements KeyListener, ActionListener 
     private int ballXdir = 1;
     private int ballYdir = -2;
 
-    private String username;
-    private int high_score = 0;
+    private final String username;
+    private int high_score;
 
     private int playerX = ballposX;
 
@@ -43,6 +42,7 @@ public class GameSettings extends JPanel implements KeyListener, ActionListener 
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        int delay = 8;
         timer = new Timer(delay, this);
         timer.start();
     }
@@ -184,14 +184,14 @@ public class GameSettings extends JPanel implements KeyListener, ActionListener 
             //check ball collision with left part of paddle
             if (new Rectangle(ballposX, ballposY, 20, 20).intersects(new Rectangle(playerX, 940, 55, 8))) {
                 ballYdir *= -1;
-//                ballXdir = -2;
+                ballXdir -= 2;
                 //check ball collision with central part of paddle
             } else if (new Rectangle(ballposX, ballposY, 20, 20).intersects(new Rectangle(playerX + 54, 940, 12, 8))) {
                 ballYdir *= -1;
                 //check ball collision with right part of paddle
             } else if (new Rectangle(ballposX, ballposY, 20, 20).intersects(new Rectangle(playerX + 64, 940, 100, 8))) {
                 ballYdir = -ballYdir;
-//                ballXdir = 2;
+                ballXdir += 2;
             }
 
             // check map collision with the ball
